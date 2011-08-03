@@ -28,7 +28,7 @@ $file->min_X = 300;
 $file->min_Y = 300;
 
 //Perform functions
-$file->upload();
+$file->upload(true, true);
 $file->perform_manipulations(true, true, true);
 
 //Error Output

@@ -44,10 +44,8 @@ class file_upload {
 	var $maxSize = 1572864; //Max file size in megabytes
 	var $uploadDir; //The directory the file is to be stored.
 	var $extensions = array( ".jpg", ".png", ".gif", ".bmp"); //Array of accepted file extensions. Defaults to common image extensions that Image Magick supports. It is recommended that you do not deviate from these and use the conversion function to standardize your websites image files.
-	var $validate = true;  //Perform extension validation.
 	var $multipleUpload = true; //Set if script is to be uploading multiple files. This flag will add a counter to the end of the new file name.
 	var $extString; //This is the array of extensions as a string
-	var $renameFile = false; //True or false.
 	var $newName; //The new name the file is to be saved as. If left blank, the script will rename it to a timestamp.
 	var $fileNum = 1; //Var starts a file counter to add as an extension so files are not overwritten when uploading multiple files.
 	var $maxFileName = 32; //Max length for filename
@@ -190,25 +188,30 @@ class file_upload {
 		} 	
 	}
 			
-	function upload(){ //Procederal function brings it all together and uploads the file. Tests for false, if false, die and create errorText var.
+	function upload($rename = true, $validate = true){ //Procederal function brings it all together and uploads the file. Tests for false, if false, die and create errorText var.
 		$this->show_ext();
 		if (!$this->check_file_name($this->theFile)){
-			die($this->error_text());	
+			unlink($this->theFile);	
+			die($this->error_text());
 		}
 		if (!$this->max_size()){
+			unlink($this->theFile);	
 			die($this->error_text());	
 		}
 		if (!$this->check_dir($this->uploadDir)) {
+			unlink($this->theFile);	
 			die($this->error_text());	
 		}
-		if ($this->validate == true){
+		if ($validate == true){
 			if (!$this->validate_ext()){
 				$this->show_ext();
+				unlink($this->theFile);	
 				die($this->error_text());	
 			}
 		}
-		if ($this->renameFile == true){
+		if ($rename == true){
 			if (!$this->rename_file()){
+				unlink($this->theFile);	
 				die($this->error_text());	
 			}
 		}
@@ -217,6 +220,7 @@ class file_upload {
 			$origName = $this->theFile;
 			if (!move_uploaded_file($this->tempFile, $newfile)) {
 				$this->error[] = "The file could not be moved to the new directory. Check permissions and folder paths.";
+				unlink($this->theFile);	
 				die($this->error_text());	
 			}else{
 				$this->error[] = "The file ".$this->originalName." was successfully uploaded.";
@@ -224,6 +228,7 @@ class file_upload {
 			}
 		}else{
 			$this->error[] = $this->file_upload_error_message($_FILES[$this->uploadName]['error']);
+			unlink($this->theFile);	
 			die($this->error_text());
 		}
 	}

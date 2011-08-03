@@ -29,8 +29,7 @@ $file->min_Y = 300;
 
 //Perform functions
 
-$file->rename_file();
-$file->upload();
+$file->upload(true, true);
 $file->perform_manipulations(true, true, true);
 
 //Error Output
