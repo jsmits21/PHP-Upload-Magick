@@ -33,6 +33,7 @@ $file->perform_manipulations(true, true, true);
 
 //Error Output
 $errormsg = $file->error_text();
-header("HTTP/1.1 201 Uploaded File was Successful");
+header("HTTP/1.1 200 Uploaded File was Successful");
 echo $errormsg;
+
 ?>
