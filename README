@@ -35,4 +35,4 @@ Special thanks to Olaf Lederer and his Easy PHP Upload class library. His was th
 2: The 'website' folder would be your website's domain folder. Ex: 'mywebsite.com'. Simply copy the contents of this folder to your websites domain folder.
 3: All paths in the contained files are relative, and should work without much, if any modification. If you want your directory tree to differ from my own, you must change the paths in the contained files.
 
-*For a more detailed installation as well as tutorials, please view "phpuploadmagick.pdf."
+*For a more detailed installation as well as tutorials, please view "instructions.pdf."
