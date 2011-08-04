@@ -14,13 +14,13 @@ $file->maxSize = 1572864;
 $file->renameFile = true;
 $file->extensions = array(".jpg", ".png", ".gif", ".bmp");
 $file->newName = "image";
-$file->uploadDir = "$DOCUMENT_ROOT/../thehoppr.com/testing/results/";
+$file->uploadDir = "$DOCUMENT_ROOT/../mywebsite.com/testing/results/";
 $file->conFormat = ".jpg";
 
 //Image Manipulation Vars
 
 $file->constrain = true;
-$file->thumbDir = "$DOCUMENT_ROOT/../thehoppr.com/testing/results/thumb/";
+$file->thumbDir = "$DOCUMENT_ROOT/../mywebsite.com/testing/results/thumb/";
 $file->sharpen = true;
 $file->max_X = 800;
 $file->max_Y = 600;
