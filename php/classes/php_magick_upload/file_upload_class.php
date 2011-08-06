@@ -2,7 +2,7 @@
 
 /************************************************************************************************************************************
 
-PHP/Image Magick Upload - Version 1.0
+PHP/Image Magick Upload - Version 1.1
 
 A powerful image uploading class that utilizes Image Magick to ensure user uploaded images adhere to your web applications standards.
 

@@ -1,7 +1,7 @@
 **********************************
 *       PHP Upload Magick        *
 *      Author: Jacob Smits       *
-*            ver 1.0             *
+*            ver 1.1             *
 **********************************
 
 An object-based class for the easy uploading and manipulation of files. PHP Upload Magick can easily upload and rename files, resize and sharpen images, and just generally make handling uploads on your web server pain free. Also included are all the necessary files for uploading multiple files in one form using SWF Upload.
