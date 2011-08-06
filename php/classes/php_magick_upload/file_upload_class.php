@@ -28,8 +28,6 @@ Features:
 
 Notes:
 
-	* This script requires Image Magick to be installed in the Linux operating system.
-	* Visit http://www.imagemagick.org/ for information.
 	* Please do not copy or use any of this code without crediting me and this library.
 
 *************************************************************************************************************************************/
@@ -55,6 +53,10 @@ class file_upload {
 	var $conFormat; //The extension to convert the file/image to. Moved from image_manip_class to fix a rename_file() bug.
 	var $fileperm = 0644;
 	var $dirperm = 0755;
+	var $dbTable;	//The table that you want to store the information to
+	var $dbField = array('name', 'url', 'date'); //An array of fields that the script saves the information to
+	var $webURL; //The formatted web URL you saved the images to
+
 	
 	/********** File Upload Functions ***********/
 	
@@ -83,7 +85,8 @@ class file_upload {
 	
 	function check_convert(){ //If user isn't going to be converting files, set conFormat to current extension
 		if(!isset($this->conFormat) || $this->conFormat == ''){
-			$this->conFormat = $this->get_ext($this->theFile);	
+			$this->conFormat = $this->get_ext($this->theFile);
+			echo "conFormat set to: ".$this->get_ext($this->theFile);
 		}
 	}
 	
@@ -188,8 +191,9 @@ class file_upload {
 		} 	
 	}
 			
-	function upload($rename = true, $validate = true){ //Procederal function brings it all together and uploads the file. Tests for false, if false, die and create errorText var.
+	function upload($rename = true, $validate = true, $db_entry = true){ //Procederal function brings it all together and uploads the file. Tests for false, if false, die and create errorText var.
 		$this->show_ext();
+		$this->check_convert();
 		if (!$this->check_file_name($this->theFile)){
 			unlink($this->theFile);	
 			die($this->error_text());
@@ -223,13 +227,35 @@ class file_upload {
 				unlink($this->theFile);	
 				die($this->error_text());	
 			}else{
-				$this->error[] = "The file ".$this->originalName." was successfully uploaded.";
+				$this->error[] = "The file ".$origName." was successfully uploaded.";
 				chmod($newfile , $this->fileperm);
 			}
 		}else{
 			$this->error[] = $this->file_upload_error_message($_FILES[$this->uploadName]['error']);
 			unlink($this->theFile);	
 			die($this->error_text());
+		}
+		if ($db_entry == true){
+			$thePath = $this->webURL.$this->newName.$this->conFormat;
+			$timestamp = date('c');
+			$timestamp = explode('T', $timestamp);
+			$datestamp = $timestamp[0];
+			$timestamp = explode('+', $timestamp[1]);
+			$timestamp = $timestamp[0];			
+			$insertQry = sprintf("INSERT INTO %s (%s, %s, %s) VALUES ('%s','%s','%s')",
+				mysql_real_escape_string($this->dbTable), 
+				mysql_real_escape_string($this->dbField['name']), 
+				mysql_real_escape_string($this->dbField['url']), 
+				mysql_real_escape_string($this->dbField['date']), 
+				mysql_real_escape_string($this->newName.$this->conFormat),
+				mysql_real_escape_string($thePath),
+				mysql_real_escape_string($datestamp." ".$timestamp));
+			$insertResult = mysql_query($insertQry);
+			if (!$insertResult) {
+				die('Invalid query: ' . mysql_error());
+			}else{
+				$this->error[] = "Image information successfully inserted into database";	
+			}
 		}
 	}
 	
